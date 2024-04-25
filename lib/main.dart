@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:todo/firebase_options.dart';
 import 'package:todo/registration.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
 }
 
@@ -15,13 +21,16 @@ class MainApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  String? mailAdress;
+  String? password;
+
+  MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +53,20 @@ class MyHomePage extends StatelessWidget {
               ],
             ),
           ),
-          const CustomTextField(label: 'メールアドレス'),
-          const CustomTextField(label: 'パスワード'),
+          CustomTextField(
+            label: 'メールアドレス',
+            onChangedfunc: (newText) {
+              mailAdress = newText;
+            },
+            isPassword: false,
+          ),
+          CustomTextField(
+            label: 'パスワード',
+            onChangedfunc: (newText) {
+              password = newText;
+            },
+            isPassword: true,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -55,7 +76,7 @@ class MyHomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Registration()));
+                            builder: (context) => Registration()));
                   },
                   child: const Text("こちら"))
             ],
@@ -79,15 +100,24 @@ class MyHomePage extends StatelessWidget {
 
 class CustomTextField extends StatelessWidget {
   final String label;
+  final void Function(String text) onChangedfunc;
+  final bool isPassword;
 
-  const CustomTextField({required this.label, super.key});
+  const CustomTextField(
+      {required this.label,
+      required this.onChangedfunc,
+      required this.isPassword,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-        onChanged: (newText) {},
+        onChanged: (newText) {
+          onChangedfunc(newText);
+        },
+        obscureText: isPassword ? true : false,
         decoration: InputDecoration(
             labelText: label,
             border: const OutlineInputBorder(

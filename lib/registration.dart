@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:todo/main.dart';
 
 class Registration extends StatelessWidget {
-  const Registration({super.key});
+  String? mailAdress;
+  String? password;
+  String? passwordCheck;
+
+  Registration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +16,21 @@ class Registration extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const CustomTextField(label: 'メールアドレス'),
-          const CustomTextField(label: 'パスワード'),
-          const CustomTextField(label: 'パスワード確認'),
+          CustomTextField(
+            label: 'メールアドレス',
+            onChangedfunc: (newText) => mailAdress = newText,
+            isPassword: false,
+          ),
+          CustomTextField(
+            label: 'パスワード',
+            onChangedfunc: (newText) => password = newText,
+            isPassword: true,
+          ),
+          CustomTextField(
+            label: 'パスワード確認',
+            onChangedfunc: (newText) => passwordCheck = newText,
+            isPassword: true,
+          ),
           ElevatedButton(
               onPressed: () {},
               child: Container(
