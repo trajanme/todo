@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/registration.dart';
 
 void main() {
   runApp(const MainApp());
@@ -49,7 +50,14 @@ class MyHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text("新規登録は"),
-              TextButton(onPressed: () {}, child: const Text("こちら"))
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Registration()));
+                  },
+                  child: const Text("こちら"))
             ],
           ),
           ElevatedButton(
