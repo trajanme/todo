@@ -112,6 +112,21 @@ class Registration extends StatelessWidget {
                       }
                     } catch (e) {
                       // ここにアラートを表示させる処理を追加する
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('エラー'),
+                              content: Text(e.toString()),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('OK'))
+                              ],
+                            );
+                          });
                       debugPrint(e.toString());
                     }
                   } else {}
