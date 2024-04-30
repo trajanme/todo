@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:todo/firebase_options.dart';
 import 'package:todo/registration.dart';
+import 'package:todo/todo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +84,49 @@ class MyHomePage extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  UserCredential userCredential = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: mailAdress!, password: password!);
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Todo()));
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('エラー'),
+                            content: const Text('メールアドレスが見つかりません。'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'))
+                            ],
+                          );
+                        });
+                  } else if (e.code == 'wrong-password') {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('エラー'),
+                            content: const Text('パスワードが違います。'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'))
+                            ],
+                          );
+                        });
+                  }
+                }
+              },
               child: Container(
                 width: 200,
                 height: 50,
